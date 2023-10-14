@@ -1,0 +1,1 @@
+wt.exe --title Securifai powershell C:\programming\scripts\startup\tab-one.ps1 ; split-pane --title Securifai powershell ; new-tab --title FGO-theme powershell; split-pane --title FGO-theme powershell 
