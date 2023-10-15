@@ -1,44 +1,37 @@
 import os
+import glob
 import re
 
-directory = '' # your path here
+directory = r'C:\storage\programming\FGO-Frontend\fgo\src'  # your path here
+library_imports = ['from "react"', 'from \'react\'']
+added_imports = 0
+updated_imports = 0
 
-updated_imports_count = 0
-added_imports_count = 0
+for filename in glob.iglob(directory + '/**/*.tsx', recursive=True):
+    if os.path.isfile(filename):
+        with open(filename,'r', encoding='utf-8') as file:
+            file_contents = file.read().splitlines()
+            matching_lines = list(filter(lambda line: any(term in line for term in library_imports), file_contents))
+            if len(matching_lines) == 0:
+                print(f"Adding import for {filename}")
+                added_imports += 1
+                file_contents.insert(0, "import React from 'react';")
+                with open(filename, 'w', encoding='utf-8') as updated_file:
+                    updated_file.write('\n'.join(file_contents))
+            else:
+                result_strings = [re.split(r'\s+from\s+', s)[0] for s in matching_lines]
+                has_react_import = [s for s in result_strings if re.search(r'[Rr]eact', s)]
+                if len(has_react_import) > 0:
+                    print(f"Skipping, react import exists for {filename}")
+                else:
+                    print(f"Updated existing import for {filename}")
+                    updated_imports += 1
+                    if result_strings:
+                        modified_import = result_strings[0].replace('import', 'import React,') + ' from \'react\';'
+                        index_to_replace = file_contents.index(matching_lines[0])
+                        file_contents[index_to_replace] = modified_import
+                    with open(filename, 'w', encoding='utf-8') as updated_file:
+                        updated_file.write('\n'.join(file_contents))
 
-def consolidate_imports(file_contents, file_path):
-
-    global updated_imports_count
-    global added_imports_count
-
-    existing_imports = re.findall(r'import (.+?) from ["\']react["\']\s*;', file_contents)
-    if existing_imports:
-        existing_imports = [imp for imp in existing_imports if 'React' not in imp]
-        if existing_imports:
-            updated_imports_count += 1
-            print(f"Updated import for {file_path}")
-            consolidated_import = f"import React, {', '.join(existing_imports)} from 'react';"
-            return re.sub(r'import (.+?) from ["\']react["\']\s*;', consolidated_import, file_contents)
-        else:
-            print(f"Skipping, import found for {file_path}")
-            return file_contents
-    else:
-        added_imports_count += 1
-        print(f"Added import for {file_path}")
-        return f"import React from 'react';\n{file_contents}"
-
-def read_file(file_path):
-    full_file_path = os.path.join(directory, file_path)
-    with open(full_file_path, 'r') as f:
-        file_contents = f.read()
-        modified_contents = consolidate_imports(file_contents, file_path)
-        return modified_contents
-
-for filename in os.listdir(directory):
-    if filename.endswith('.tsx'):
-        modified_contents = read_file(filename)
-        with open(os.path.join(directory, filename), 'w') as f:
-            f.write(modified_contents)
-
-print(f"Total imports updated: {updated_imports_count}")
-print(f"Total imports added: {added_imports_count}")
+print(f"Added imports for {added_imports}")
+print(f"Updated imports for {updated_imports}")
