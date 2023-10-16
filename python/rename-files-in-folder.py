@@ -1,7 +1,9 @@
 import os
 import glob
+from tkinter import Tk
+from tkinter.filedialog import askdirectory
 
-directory = r'/home/dev/Downloads/asobi'  # your path here
+directory = askdirectory(title='Select Folder')
 starting_file_number = 1
 new_file_name = input("Insert your file name: ")
 
