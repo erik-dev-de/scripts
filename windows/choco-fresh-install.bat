@@ -10,10 +10,11 @@ choco install qbittorrent --yes
 choco install onlyoffice --yes
 choco install tutanota --yes
 choco install dbeaver --yes
-choco install sourcetree --yes
+choco install intellijidea-community --yes
 choco install google-chrome-x64 --yes
 choco install 7zip --yes
 choco install powershell-core --yes
+choco install lightshot --yes
+choco install ubisoft-connect --yes
 
 rem Microsoft Office seemingly unavailable through choco
-rem Ubisoft Connect also caused an error, may have been because I needed to restart though
