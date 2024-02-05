@@ -1,4 +1,7 @@
 import os
+import time
+
+start = time.time()
 
 def is_hidden(filepath):
     if os.name == 'nt':
@@ -7,7 +10,7 @@ def is_hidden(filepath):
             return attrs & getattr(os, 'FILE_ATTRIBUTE_HIDDEN', 2) != 0
         except OSError:
             return False
-    else:  # For Unix-like systems (including Linux)
+    else:
         return os.path.basename(filepath).startswith('.')
 
 def count_files_in_subdirectories(root_directory):
@@ -26,5 +29,7 @@ def count_files_in_subdirectories(root_directory):
     for folder_name, file_count in subdirectory_info:
         print(f"{folder_name}: {file_count}")
 
-root_directory = ''
+root_directory = 'D:\\backup\\screenshots'
 count_files_in_subdirectories(root_directory)
+end = time.time()
+print(abs(start - end) * 1000)
