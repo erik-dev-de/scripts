@@ -4,7 +4,7 @@ choco install steam --yes
 choco install nodejs-lts --yes
 choco install vscode --yes
 choco install git --yes
-choco install microsoft-teams-new-bootstrapper
+choco install microsoft-teams-new-bootstrapper --yes
 choco install postman --yes
 choco install qbittorrent --yes
 choco install onlyoffice --yes
@@ -15,5 +15,4 @@ choco install google-chrome-x64 --yes
 choco install 7zip --yes
 choco install powershell-core --yes
 choco install lightshot --yes
-
-rem Microsoft Office seemingly unavailable through choco
+choco install postgresql --yes
